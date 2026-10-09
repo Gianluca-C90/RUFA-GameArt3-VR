@@ -106,3 +106,7 @@ InitTestScene*.unity*
 
 # Auto-generated cache in Assets folder
 /[Aa]ssets/[Ss]ceneDependencyCache*
+
+# XR Interaction Simulator sample: RUFA > Play mode > Simulatore VR imports it on first use (34 MB, never in git)
+/sandbox/Assets/Samples/XR Interaction Toolkit/*/XR Interaction Simulator/
+/sandbox/Assets/Samples/XR Interaction Toolkit/*/XR Interaction Simulator.meta
