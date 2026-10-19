@@ -110,3 +110,8 @@ InitTestScene*.unity*
 # XR Interaction Simulator sample: RUFA > Play mode > Simulatore VR imports it on first use (34 MB, never in git)
 /sandbox/Assets/Samples/XR Interaction Toolkit/*/XR Interaction Simulator/
 /sandbox/Assets/Samples/XR Interaction Toolkit/*/XR Interaction Simulator.meta
+# The hands of lesson 3 (XR Hands samples and XRI's Hands Interaction Demo): the tutorial imports them, never in git
+/sandbox/Assets/Samples/XR Hands/
+/sandbox/Assets/Samples/XR Hands.meta
+/sandbox/Assets/Samples/XR Interaction Toolkit/*/Hands Interaction Demo/
+/sandbox/Assets/Samples/XR Interaction Toolkit/*/Hands Interaction Demo.meta
