@@ -452,82 +452,173 @@ Le mani sono naturali per prendere da vicino, premere un pulsante, toccare un pa
 # Da soli · Verifica
 
 ## La fuga
-Ora tocca a te, senza istruzioni passo passo. Premi il pulsante: si apre la scena `Verifica`, una fila di stanze dal punto A al punto B. Per uscire da ogni stanza serve qualcosa di questa lezione.
+Ora tocca a te, senza istruzioni passo passo. Premi il pulsante: si apre la scena `Verifica`, una fila di stanze dal punto A al punto B. Ogni porta si apre solo con qualcosa di questa lezione.
 
 Le regole:
 - l'**ambiente non si sposta**: niente oggetti spostati, ruotati o scalati;
 - puoi **aggiungere** componenti e oggetti, e collegare eventi;
+- i pezzi delle stanze ci sono tutti, ma **rotti o senza componenti**, come nella Sala: il cassetto che la mano non prende, la chiave che non si prende, la serratura e il pulsante che hanno solo la forma, il trigger che fa da muro, il tastierino che il raggio non clicca, la palla che non vola;
 - il rig della fuga, `XR Origin (fuga)`, non ha né la torcia né il menu: aggiungili tu;
 - le porte si aprono solo quando qualcosa le apre, mai cliccando l'anta.
 
-Qui sotto c'è cosa devi ottenere, non come. I compiti si spuntano da soli mentre lavori, e le prove in Play si fanno col simulatore o col visore. È un'autovalutazione: serve a te.
+Qui sotto c'è cosa devi ottenere, non come; se ti blocchi, sotto ogni compito c'è **Mostra la soluzione**: il compito conta lo stesso, ma resta segnato. I compiti si spuntano da soli mentre lavori, e in alto vedi il punteggio. Le prove in Play si fanno col **Simulatore VR** acceso (RUFA ▸ Play mode ▸ Simulatore VR), oppure col visore e Quest Link (RUFA ▸ Play mode ▸ VR con Quest Link). Quello che ottieni in Play resta spuntato. È un'autovalutazione: serve a te.
 > azione: Apri la verifica | apri-scena | Lezione 03 - Interazioni | Verifica
 
-## La chiave
-Nella stanza 1 la chiave è chiusa in un cassetto che non si apre, e non si prende. La serratura sull'anta della porta 1 ha solo la forma: niente socket, niente script.
+## Il cassetto
+Nella stanza 1, a sinistra, c'è il `Mobile 1`, e nel suo `Cassetto 1` c'è la chiave. Il cassetto ha già il suo Configurable Joint, come quello della Sala, ma la mano non lo prende.
 
-**Risultato atteso:** in Play la porta 1 si apre con la chiave.
+**Risultato atteso:** in Play apri il cassetto fino in fondo.
+> verifica: stato Cassetto 1 | Slide | Value | 0,95 | 1
+> soluzione: Nella Hierarchy apri `Ambiente` ▸ `Mobile 1` e seleziona `Cassetto 1`.
+> soluzione: **Add Component** ▸ **XR Grab Interactable**.
+> soluzione: **Movement Type** su **Velocity Tracking**, e togli la spunta a **Track Rotation**: il cassetto lo guida il giunto, non il polso.
+> soluzione: In **Attach Transform** trascina il figlio `Attach` del cassetto, sulla maniglia. Salva.
+> soluzione: In Play punta la maniglia, tieni **G** e premi **S**: ti allontani, e il cassetto si apre fino in fondo.
+> lavoro: 3 2
+
+## La presa del cassetto
+**Risultato atteso:** il cassetto si prende dalla maniglia, il suo `Attach`, e si muove con la fisica, così il giunto lo tiene sulle guide.
+> verifica: scena-numero Cassetto 1 | XRGrabInteractable | m_MovementType | 0 | 0
+
+## La chiave
+La chiave è nel cassetto, ma non si prende. Il suo `Attach` è l'anello, da dove la mano la tiene. Col simulatore mettiti sopra il cassetto aperto e guarda in basso con la **freccia giù**: da lontano il raggio prende il bordo del cassetto.
+
+**Risultato atteso:** in Play prendi la chiave in mano.
+> verifica: afferrato Chiave
+> soluzione: Seleziona `Chiave`, in `Ambiente`, e aggiungi un **XR Grab Interactable**.
+> soluzione: In **Attach Transform** trascina il suo figlio `Attach`, l'anello.
+> soluzione: In **Interaction Layer Mask** spunta **Default** e **Chiave**: così entra anche in una serratura sul layer Chiave. Salva.
+> soluzione: In Play apri il cassetto, mettiti sopra il cassetto aperto, guarda in basso con la **freccia giù**, punta la chiave e tieni **G**.
+> lavoro: 2 1
+
+## La serratura
+Sull'anta della porta 1, sotto il pomello, c'è la `Serratura`: ha solo la forma, senza socket e senza script, e il suo `Attach` è il punto dove la chiave si ferma, con la punta dentro l'anta. Ci deve entrare la chiave, e quando entra la porta si apre, come nella stanza malata della Sala. Chiave e serratura si trovano solo se hanno un interaction layer in comune: se metti la serratura sul layer `Chiave`, come nella Sala, anche la chiave lo deve avere. Col simulatore tieni **G** sulla chiave, avvicinati con **W A S D**, punta la serratura e lascia **G**.
+
+**Risultato atteso:** in Play metti la chiave nella serratura, e la porta 1 si apre.
 > verifica: stato Porta 1 | Door | IsOpen | sì
-> lavoro: 11 5
+> soluzione: Seleziona `Serratura`: in `Ambiente` ▸ `Porta 1` ▸ `Anta`.
+> soluzione: **Add Component** ▸ **XR Socket Interactor**, e in **Attach Transform** trascina il figlio `Attach` della serratura. In **Interaction Layer Mask** lascia **Everything**, oppure solo **Chiave** se la chiave ha il layer Chiave.
+> soluzione: **Add Component** ▸ **Lock**.
+> soluzione: In **On Unlocked ()** premi **+**, trascina `Porta 1` e scegli **Door ▸ Open ()**. Salva.
+> soluzione: In Play apri il cassetto e prendi la chiave; tenendo **G** avvicinati alla porta con **W A S D**, punta la serratura e lascia **G**.
+> lavoro: 6 2
+
+## La serratura collegata
+**Risultato atteso:** la serratura, quando la chiave entra, apre la porta 1.
+> verifica: evento Serratura | Lock | onUnlocked | Open
 
 ## Il pulsante
-Nella stanza 2 il pulsante è solo una forma.
+Nella stanza 2, sulla colonnina a sinistra, c'è il `Pulsante 2`: ha solo la forma, la base e il `Cappello`, senza componenti. Come il pulsante della Sala, va premuto, e premuto apre la porta 2. Col simulatore si preme col raggio e **G**.
 
-**Risultato atteso:** in Play, premendo il pulsante, la porta 2 si apre.
+**Risultato atteso:** in Play premi il pulsante, e la porta 2 si apre.
 > verifica: stato Porta 2 | Door | IsOpen | sì
+> soluzione: Seleziona `Pulsante 2`, in `Ambiente`.
+> soluzione: **Add Component** ▸ **Push Button**: aggiunge da solo l'XR Simple Interactable.
+> soluzione: In **Cap** trascina il suo figlio `Cappello`.
+> soluzione: In **On Pressed ()** premi **+**, trascina `Porta 2` e scegli **Door ▸ Open ()**. Salva.
+> soluzione: In Play punta il pulsante col raggio e premi **G**.
 > lavoro: 6 3
 
-## Entra nel buio
-Oltre la porta 2 c'è la stanza buia, ma sulla soglia un trigger fa da muro.
+## Il pulsante collegato
+**Risultato atteso:** il pulsante, quando lo premi, apre la porta 2.
+> verifica: evento Pulsante 2 | PushButton | onPressed | Open
 
-**Risultato atteso:** in Play entri, e il trigger scatta.
+## Entra nel buio
+Oltre la porta 2 c'è la stanza buia. L'ingresso gira due volte, così il sole non entra, e dove l'ingresso incontra il corridoio il `Trigger della stanza buia` fa da muro, come il trigger del cartello nella Sala. Quando lo attraversi, il cartello sul muro davanti ti dice cosa cercare.
+
+**Risultato atteso:** in Play entri nel corridoio, e il trigger scatta.
 > verifica: stato Trigger della stanza buia | NarrativeTrigger | Fired | sì
+> soluzione: Seleziona `Trigger della stanza buia`: in `Ambiente` ▸ `Stanza buia`.
+> soluzione: Nel suo **Box Collider** spunta **Is Trigger**. Salva.
+> soluzione: In Play attraversa la porta 2 e cammina nell'ingresso fino al corridoio: il cartello sul muro scrive «Il codice è sul muro. Ti serve una luce.».
 > lavoro: 3 1
 
+## Il trigger
+**Risultato atteso:** il trigger della stanza buia si attraversa.
+> verifica: scena-vero Trigger della stanza buia | BoxCollider | m_IsTrigger | sì
+
 ## La torcia nel rig
+Il rig della fuga non ha la torcia: costruiscila come nel capitolo 7, sul `Right Controller` del prefab `XR Origin (fuga)`.
+
 **Risultato atteso:** il rig della fuga ha una torcia che si accende col tasto B.
 > verifica: prefab-componente XR Origin (fuga) | Camera Offset/Right Controller | ButtonToggle
+> soluzione: Nella cartella della palestra apri il prefab `XR Origin (fuga)` con un doppio clic.
+> soluzione: Clic destro su `Camera Offset/Right Controller` ▸ **Light ▸ Spotlight**: chiamala `Torcia`, **Position** e **Rotation** a 0, **Range** 10, **Spot Angle** 40, **Intensity** 3, e togli la spunta accanto al nome.
+> soluzione: Seleziona `Right Controller`, aggiungi **Button Toggle** e trascina `Torcia` in **Target**.
+> soluzione: Nel campo **Button**, sulla prima azione, `Accendi`, premi **+** ▸ **Add Binding**; seleziona il binding nuovo e nel campo **Path** premi **T** e scrivi `<XRController>{RightHand}/secondaryButton`.
+> soluzione: Salva il prefab.
 > lavoro: 6 3
 
 ## Il codice
-**Risultato atteso:** in Play la torcia illumina il codice scritto sul muro della stanza buia.
+In fondo alla stanza buia, sul muro, è appeso il `Codice`: al buio non si legge. Col simulatore la torcia si accende col tasto **2**: punta il mouse sul muro di fondo. Il codice ti serve nella stanza 4.
+
+**Risultato atteso:** in Play la torcia illumina il codice.
 > verifica: riuscito Codice
+> soluzione: In Play entra nella stanza buia e vai in fondo, davanti al muro.
+> soluzione: Premi **2**: la torcia si accende.
+> soluzione: Punta il mouse sul quadro del muro di fondo: il codice compare nella luce. Segnatelo.
 > lavoro: 3 1
 
 ## Il tastierino
-Nella stanza 4 il tastierino è già collegato alla porta, ma il raggio non lo clicca.
+L'uscita della stanza buia porta alla stanza 4. A sinistra della porta 4 c'è il `Tastierino`: il suo Keypad è già collegato alla porta, e il codice giusto la apre. Ma il raggio non lo clicca, come il pannello della postazione 5 della Sala. Col simulatore i tasti si premono col raggio e **T**, o col tasto sinistro del mouse.
 
-**Risultato atteso:** in Play scrivi il codice e la porta 4 si apre.
+**Risultato atteso:** in Play scrivi il codice, e la porta 4 si apre.
 > verifica: stato Porta 4 | Door | IsOpen | sì
+> soluzione: Seleziona `Tastierino`, in `Ambiente`.
+> soluzione: **Add Component** ▸ **Tracked Device Graphic Raycaster**. Il Graphic Raycaster lascialo. Salva.
+> soluzione: In Play punta un tasto alla volta col raggio e premi **T**: scrivi il codice della stanza buia.
 > lavoro: 4 2
 
+## Il tastierino per i raggi
+**Risultato atteso:** il tastierino si clicca coi raggi dei controller.
+> verifica: scena-componente Tastierino | TrackedDeviceGraphicRaycaster
+
 ## Il lancio
-Nella stanza 5 una campana apre l'ultima porta, se la colpisci. La palla però non vola.
+Nella stanza 5 la `Palla` è sul piedistallo, e 3 m più avanti pende la `Campana`: colpita, apre la porta 5. La palla però, quando la lasci, cade a piombo, come quella della Sala. Col simulatore si lancia come nella Sala: punta la palla e tieni **G**, porta il mouse sulla campana, tieni **I** finché la palla è quasi arrivata, poi lascia **G**.
 
 **Risultato atteso:** in Play colpisci la campana con la palla.
 > verifica: riuscito Campana
+> soluzione: Seleziona `Palla`, in `Ambiente`.
+> soluzione: Nel suo **XR Grab Interactable**: **Movement Type** su **Velocity Tracking**, e spunta **Throw On Detach**. Salva.
+> soluzione: In Play punta la palla e tieni **G**, porta il mouse sulla campana, tieni **I** finché la palla è quasi arrivata, poi lascia **G**.
 > lavoro: 6 3
 
+## La palla che vola
+**Risultato atteso:** la palla, quando la lasci, parte con la velocità della mano.
+> verifica: scena-vero Palla | XRGrabInteractable | m_ThrowOnDetach | sì
+
 ## L'arrivo
+Oltre la porta 5 c'è il punto B.
+
 **Risultato atteso:** in Play arrivi al punto B.
 > verifica: sopra-oggetto Arrivo
+> soluzione: In Play, aperta la porta 5, attraversala e cammina fino al pavimento della stanza B.
 > lavoro: 1 1
 
 ## L'ambiente intatto
 **Risultato atteso:** nessun oggetto dell'ambiente spostato, ruotato o scalato.
 > verifica: ambiente-intatto Ambiente
+> soluzione: Se il compito resta ✗, un oggetto di `Ambiente` è stato spostato, ruotato o scalato: **Ctrl+Z** finché torna ✓.
 
 ## Extra: il menu sul polso
-Il menu sul polso della palestra, nel rig della fuga, con lo slider collegato alla velocità. È un punto in più, fuori dal punteggio.
+Il `Menu sul polso` della cartella della palestra, nel rig della fuga, come nel capitolo 6: dentro `Camera Offset`, con le sue due ancore e lo slider collegato alla velocità. Col simulatore il menu è sopra il controller sinistro: punta la parte destra dello slider e premi **T**. È un punto in più, fuori dal punteggio.
 
 **Risultato atteso:** in Play il menu porta la velocità sopra 2,5 m/s.
 > verifica: stato XR Origin (fuga)(Clone)/Locomotion/Move | DynamicMoveProvider | moveSpeed | 2,6 | 10
+> soluzione: Apri il prefab `XR Origin (fuga)`.
+> soluzione: Dalla cartella della palestra trascina `Menu sul polso` sopra `Camera Offset`: diventa suo figlio, allo stesso livello di `Left Controller` e `Right Controller`.
+> soluzione: Nell'**Hand Menu** del menu trascina `Ancora sinistra` in **Left Palm Anchor** e `Ancora destra` in **Right Palm Anchor**.
+> soluzione: Apri il menu, seleziona `Pannello/Slider velocità`; in **On Value Changed (Single)** premi **+**, trascina `Locomotion/Move` del rig e scegli **DynamicMoveProvider ▸ moveSpeed**, tra le Dynamic float. Salva il prefab.
+> soluzione: In Play il menu è sopra il controller sinistro: punta la parte destra dello slider e premi **T**.
 
 ## Extra: il pollice su
 La porta 5 si apre anche col pollice su della mano destra, la gesture della Sala. Il simulatore non la sa fare: si prova col visore, con **RUFA ▸ Build ▸ Scena aperta (APK)** sulla fuga. È un punto in più, fuori dal punteggio.
 
 **Risultato atteso:** sulla porta 5 un Hand Gesture col pollice su la apre.
 > verifica: evento Porta 5 | HandGesture | onPerformed | Open
+> soluzione: Seleziona `Porta 5`, in `Ambiente`, e aggiungi **Hand Gesture**.
+> soluzione: In **Shape Or Pose** trascina `Thumbs Up`, da `Assets/Samples/XR Hands/1.8.1/Gestures/Examples/Hand Poses`; lascia **Hand** su **Right**.
+> soluzione: In **On Performed ()** premi **+**, trascina `Porta 5` e scegli **Door ▸ Open ()**. Salva.
 
 # Da soli · Il tuo progetto
 

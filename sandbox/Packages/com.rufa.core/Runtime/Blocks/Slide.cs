@@ -14,6 +14,8 @@ namespace Rufa
         public UnityEvent<float> onValueChanged = new UnityEvent<float>();
         [Tooltip("Fired when the part reaches the end of its run; again only after it has gone back a little.")]
         public UnityEvent onEnd = new UnityEvent();
+        [Tooltip("The fastest the part runs, in m/s: as fast as a hand. Velocity Tracking, with the hand far off, would slam it to its stop in one step and leave behind what lies in a drawer.")]
+        public float maxSpeed = 1.5f;
         public float Value { get; private set; }
 
         ConfigurableJoint joint;
@@ -24,6 +26,7 @@ namespace Rufa
         void Awake()
         {
             joint = GetComponent<ConfigurableJoint>();
+            GetComponent<Rigidbody>().maxLinearVelocity = maxSpeed;   // the body does not save it: set when the scene starts
             start = Local();
         }
 
